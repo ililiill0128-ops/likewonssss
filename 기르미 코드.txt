@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리들의 시크릿 마니또 & 미션 공간</title>
+    <style>
+        :root {
+            --primary: #ff6b81;
+            --primary-light: #ff7675;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+            --border-color: #dfe6e9;
+        }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #ff6b81, #ff7675);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        header p {
+            margin: 8px 0 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 0 15px;
+            flex: 1;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            padding: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #636e72;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 6px rgba(255, 107, 129, 0.3);
+        }
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: #2d3436;
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 12px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background: #fafbfc;
+        }
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+        button.primary-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button.primary-btn:hover {
+            background: #ff5252;
+        }
+        .card-result {
+            margin-top: 20px;
+            background: #fff0f3;
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .member-badge {
+            background: #f1f2f6;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .mission-item {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .mission-item .tag {
+            display: inline-block;
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .mission-item p {
+            margin: 5px 0 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .mission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #b2bec3;
+        }
+        .error-msg {
+            color: #d63031;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            color: #636e72;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎁 우리들의 시크릿 마니또</h1>
+        <p>비밀번호로 안전하게 확인하고, 익명으로 미션을 즐겨보세요!</p>
+    </header>
+
+    <div class="container">
+        <!-- 탭 메뉴 -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('check')">내 마니또 확인</button>
+            <button class="tab-btn" onclick="switchTab('members')">멤버 & 미션 안내</button>
+            <button class="tab-btn" onclick="switchTab('missions')">익명 미션 창</button>
+        </div>
+
+        <!-- Tab 1: 내 마니또 확인 -->
+        <div id="tab-check" class="tab-content active">
+            <h2>🔒 마니또 확인하기</h2>
+            <p style="font-size: 0.9rem; color: #636e72;">본인의 이름과 설정된 4자리 비밀번호를 입력해주세요.</p>
+            <div class="form-group">
+                <label for="myName">내 이름 선택</label>
+                <select id="myName">
+                    <option value="">이름을 선택하세요</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="myPin">4자리 비밀번호 (PIN)</label>
+                <input type="password" id="myPin" maxlength="4" placeholder="예: 1001">
+                <div id="pinError" class="error-msg"></div>
+            </div>
+            <button class="primary-btn" onclick="checkManitto()">마니또 확인하기</button>
+
+            <div id="resultBox" class="card-result" style="display: none;">
+                <h3 id="resultTitle" style="margin-top:0; color:var(--primary);"></h3>
+                <p id="resultDesc" style="font-size: 1.1rem; font-weight: bold; margin: 10px 0;"></p>
+                <p style="font-size: 0.85rem; color: #636e72; margin-bottom: 0;">🤫 비밀을 절대 발설하지 마세요!</p>
+            </div>
+        </div>
+
+        <!-- Tab 2: 멤버 및 미션 안내 -->
+        <div id="tab-members" class="tab-content">
+            <h2>👥 참여 멤버 (9명)</h2>
+            <p style="font-size: 0.9rem; color: #636e72;">이번 마니또에 참여한 9명의 멤버 명단입니다.</p>
+            <div class="member-grid" id="memberGrid">
+                <!-- 동적 생성 -->
+            </div>
+            <div style="margin-top: 25px; padding: 15px; background: #f1f2f6; border-radius: 8px;">
+                <h4 style="margin: 0 0 8px 0; font-size: 0.95rem;">🎯 필수 미션 리스트 (5가지)</h4>
+                <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: #4b6584; line-height: 1.6;">
+                    <li>1. 따뜻한 칭찬 해주기</li>
+                    <li>2. 12월 25일 만원 선물 준비하기</li>
+                    <li>3. 감동적인 응원 메시지 적어주기</li>
+                    <li>4. 마니또의 오늘의 TMI 알아오기</li>
+                    <li>5. 마니또의 웃긴 멘트 포착하기</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab 3: 익명 미션 창 -->
+        <div id="tab-missions" class="tab-content">
+            <h2>💬 익명 미션 & 힌트 게시판</h2>
+            <p style="font-size: 0.9rem; color: #636e72;">마니또에게 보내는 힌트나 익명 메시지를 남겨보세요! (새로고침해도 유지)</p>
+            
+            <div class="form-group">
+                <label for="missionCategory">미션/메시지 유형</label>
+                <select id="missionCategory">
+                    <option value="✨ 칭찬 해주기">✨ 칭찬 해주기</option>
+                    <option value="🎁 12.25 만원 선물 힌트">🎁 12.25 만원 선물 힌트</option>
+                    <option value="💌 응원 메시지">💌 응원 메시지</option>
+                    <option value="📌 마니또 오늘의 TMI">📌 마니또 오늘의 TMI</option>
+                    <option value="🤣 마니또 웃긴 멘트 포착">🤣 마니또 웃긴 멘트 포착</option>
+                    <option value="💬 자유 익명 글">💬 자유 익명 글</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="missionText">내용 입력</label>
+                <textarea id="missionText" rows="3" placeholder="익명으로 자유롭게 남겨주세요..."></textarea>
+            </div>
+            <button class="primary-btn" onclick="postMission()">익명으로 등록하기</button>
+
+            <div style="margin-top: 25px;">
+                <h3 style="font-size: 1.1rem; border-bottom: 1px solid #dfe6e9; padding-bottom: 8px;">등록된 미션 & 메시지 피드</h3>
+                <div id="missionFeed" style="margin-top: 15px;">
+                    <!-- 동적 생성 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Secret Manitto Project. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 9명 멤버 명단 및 고정 비밀번호(PIN), 마니또 매칭 데이터
+        const members = [
+            { name: "김여원", pin: "1001", target: "손희정" },
+            { name: "손희정", pin: "1002", target: "공현희" },
+            { name: "공현희", pin: "1003", target: "강한결" },
+            { name: "강한결", pin: "1004", target: "문소윤" },
+            { name: "문소윤", pin: "1005", target: "이윤서" },
+            { name: "이윤서", pin: "1006", target: "신가연" },
+            { name: "신가연", pin: "1007", target: "전효원" },
+            { name: "전효원", pin: "1008", target: "한은지" },
+            { name: "한은지", pin: "1009", target: "김여원" }
+        ];
+
+        // 페이지 로드 시 초기화 및 로컬 스토리지 데이터 복구
+        window.onload = function() {
+            const select = document.getElementById("myName");
+            const grid = document.getElementById("memberGrid");
+
+            members.forEach(m => {
+                let opt = document.createElement("option");
+                opt.value = m.name;
+                opt.textContent = m.name;
+                select.appendChild(opt);
+
+                let badge = document.createElement("div");
+                badge.className = "member-badge";
+                badge.textContent = m.name;
+                grid.appendChild(badge);
+            });
+
+            // 저장된 마지막 선택 이름 불러오기 (선택사항 편의성)
+            const savedName = localStorage.getItem("manitto_last_name");
+            if (savedName) {
+                select.value = savedName;
+            }
+
+            loadMissions();
+        };
+
+        // 탭 전환 기능
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            if (tabId === 'check') {
+                document.querySelector('.tabs button:nth-child(1)').classList.add('active');
+                document.getElementById('tab-check').classList.add('active');
+            } else if (tabId === 'members') {
+                document.querySelector('.tabs button:nth-child(2)').classList.add('active');
+                document.getElementById('tab-members').classList.add('active');
+            } else if (tabId === 'missions') {
+                document.querySelector('.tabs button:nth-child(3)').classList.add('active');
+                document.getElementById('tab-missions').classList.add('active');
+            }
+        }
+
+        // 비밀번호 확인 후 마니또 조회 (localStorage로 확인 상태 저장 가능)
+        function checkManitto() {
+            const name = document.getElementById("myName").value;
+            const pin = document.getElementById("myPin").value;
+            const errorDiv = document.getElementById("pinError");
+            const resultBox = document.getElementById("resultBox");
+
+            errorDiv.textContent = "";
+            resultBox.style.display = "none";
+
+            if (!name) {
+                errorDiv.textContent = "본인 이름을 선택해주세요.";
+                return;
+            }
+            if (!pin) {
+                errorDiv.textContent = "비밀번호 4자리를 입력해주세요.";
+                return;
+            }
+
+            const member = members.find(m => m.name === name);
+            if (member && member.pin === pin) {
+                localStorage.setItem("manitto_last_name", name); // 마지막 조회 이름 저장
+                resultBox.style.display = "block";
+                document.getElementById("resultTitle").textContent = `${member.name}님의 마니또는?!`;
+                document.getElementById("resultDesc").textContent = `🎁 ${member.target} 님입니다!`;
+            } else {
+                errorDiv.textContent = "비밀번호가 일치하지 않습니다. 다시 확인해주세요.";
+            }
+        }
+
+        // 익명 미션 등록 (LocalStorage 연동으로 새로고침해도 데이터 유지)
+        function postMission() {
+            const category = document.getElementById("missionCategory").value;
+            const text = document.getElementById("missionText").value.trim();
+
+            if (!text) {
+                alert("내용을 입력해주세요!");
+                return;
+            }
+
+            const newMission = {
+                id: Date.now(),
+                category: category,
+                text: text,
+                date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            let missions = JSON.parse(localStorage.getItem("manitto_missions") || "[]");
+            missions.unshift(newMission); // 최신 글이 위로 오도록 추가
+            localStorage.setItem("manitto_missions", JSON.stringify(missions));
+
+            document.getElementById("missionText").value = "";
+            loadMissions();
+        }
+
+        // 익명 미션 불러오기 (localStorage에서 가져옴)
+        function loadMissions() {
+            const feed = document.getElementById("missionFeed");
+            feed.innerHTML = "";
+
+            let missions = JSON.parse(localStorage.getItem("manitto_missions") || "[]");
+
+            if (missions.length === 0) {
+                feed.innerHTML = `<p style="text-align: center; color: #b2bec3; padding: 20px;">아직 등록된 익명 미션이 없습니다. 첫 글을 남겨보세요!</p>`;
+                return;
+            }
+
+            missions.forEach(m => {
+                let div = document.createElement("div");
+                div.className = "mission-item";
+                div.innerHTML = `
+                    <div class="mission-header">
+                        <span class="tag">${m.category}</span>
+                        <span>${m.date}</span>
+                    </div>
+                    <p>${escapeHtml(m.text)}</p>
+                `;
+                feed.appendChild(div);
+            });
+        }
+
+        // XSS 방지 유틸
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;").replace(/\n/g, "<br>");
+        }
+    </script>
+</body>
+</html>
